@@ -49,3 +49,33 @@
     color: var(--color-text-primary);
   }
 }
+
+@layer utilities {
+  .code-scrollbar {
+    scrollbar-color: var(--color-border-secondary) var(--color-bg-input);
+  }
+
+  .code-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .code-scrollbar::-webkit-scrollbar-track {
+    background: var(--color-bg-input);
+  }
+
+  .code-scrollbar::-webkit-scrollbar-corner {
+    background: var(--color-bg-input);
+  }
+
+  .code-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-border-secondary);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  .code-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-border-primary);
+  }
+}

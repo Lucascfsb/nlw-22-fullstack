@@ -15,7 +15,8 @@ const initialCode = `function calculateTotal(items) {
 
 function HeroSection() {
   const [code, setCode] = useState(initialCode);
-  const isDisabled = code.trim().length === 0;
+  const maxCodeLength = 2000;
+  const isDisabled = code.trim().length === 0 || code.length > maxCodeLength;
 
   return (
     <section className="flex flex-col gap-6">
@@ -35,7 +36,7 @@ function HeroSection() {
         </p>
       </div>
 
-      <CodeEditor value={code} onChange={setCode} />
+      <CodeEditor value={code} onChange={setCode} maxLength={maxCodeLength} />
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-4">

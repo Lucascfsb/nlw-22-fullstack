@@ -16,6 +16,7 @@ type CodeEditorProps = {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  maxLength?: number;
 };
 
 type LanguageMode = "auto" | "manual";
@@ -34,6 +35,7 @@ type LanguageOption = {
 const HIGHLIGHT_DEBOUNCE_MS = 60;
 const HIGHLIGHT_RELEVANCE_THRESHOLD = 5;
 const FALLBACK_LANGUAGE = "plaintext";
+const DEFAULT_MAX_LENGTH = 2000;
 
 const languageConfig = codeLanguages as LanguageConfig;
 
@@ -134,7 +136,13 @@ function getHighlighter() {
   return highlighterPromise;
 }
 
-function CodeEditor({ value, onChange, className }: CodeEditorProps) {
+function CodeEditor({
+  value,
+  onChange,
+  className,
+  maxLength,
+}: CodeEditorProps) {
+  const maxChars = maxLength ?? DEFAULT_MAX_LENGTH;
   const lines = value.split("\n");
   const lineCount = Math.max(lines.length, 16);
   const [languageMode, setLanguageMode] = useState<LanguageMode>("auto");
@@ -144,6 +152,7 @@ function CodeEditor({ value, onChange, className }: CodeEditorProps) {
   const [isHighlighterReady, setIsHighlighterReady] = useState(false);
   const highlightRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const lineNumbersRef = useRef<HTMLDivElement | null>(null);
   const debounceRef = useRef<number | null>(null);
 
   const detectSubset = useMemo(() => getDetectSubset(), []);
@@ -154,6 +163,9 @@ function CodeEditor({ value, onChange, className }: CodeEditorProps) {
 
   const selectedLanguage =
     languageMode === "manual" && manualLanguage ? manualLanguage : "auto";
+
+  const characterCount = value.length;
+  const isOverLimit = characterCount > maxChars;
 
   useEffect(() => {
     let active = true;
@@ -228,14 +240,16 @@ function CodeEditor({ value, onChange, className }: CodeEditorProps) {
   useEffect(() => {
     const textarea = textareaRef.current;
     const highlight = highlightRef.current;
+    const lineNumbers = lineNumbersRef.current;
 
-    if (!textarea || !highlight) {
+    if (!textarea || !highlight || !lineNumbers) {
       return;
     }
 
     const handleScroll = () => {
       highlight.scrollTop = textarea.scrollTop;
       highlight.scrollLeft = textarea.scrollLeft;
+      lineNumbers.scrollTop = textarea.scrollTop;
     };
 
     textarea.addEventListener("scroll", handleScroll);
@@ -253,6 +267,10 @@ function CodeEditor({ value, onChange, className }: CodeEditorProps) {
 
     setLanguageMode("manual");
     setManualLanguage(nextValue);
+  }
+
+  function handleChange(nextValue: string) {
+    onChange(nextValue);
   }
 
   return (
@@ -285,8 +303,11 @@ function CodeEditor({ value, onChange, className }: CodeEditorProps) {
         </label>
       </div>
 
-      <div className="flex flex-1 bg-bg-input">
-        <div className="flex flex-col items-end gap-0 py-4 px-3 w-12 border-r border-border-primary bg-bg-surface select-none">
+      <div className="flex flex-1 bg-bg-input min-h-80 max-h-96 overflow-hidden">
+        <div
+          ref={lineNumbersRef}
+          className="flex flex-col items-end gap-0 py-4 px-3 w-12 border-r border-border-primary bg-bg-surface select-none overflow-hidden"
+        >
           {Array.from({ length: lineCount }, (_, i) => (
             <span
               // biome-ignore lint/suspicious/noArrayIndexKey: line numbers are index-based and never reorder
@@ -298,7 +319,7 @@ function CodeEditor({ value, onChange, className }: CodeEditorProps) {
           ))}
         </div>
 
-        <div className="relative flex-1 min-h-80">
+        <div className="relative flex-1">
           <div
             ref={highlightRef}
             className="absolute inset-0 overflow-auto py-4 px-4 font-mono text-xs leading-[1.625] text-text-primary whitespace-pre pointer-events-none [&_pre]:!bg-transparent [&_pre]:!m-0 [&_pre]:!p-0 [&_code]:!bg-transparent [&_.line]:leading-[1.625]"
@@ -313,10 +334,18 @@ function CodeEditor({ value, onChange, className }: CodeEditorProps) {
           <textarea
             ref={textareaRef}
             value={value}
-            onChange={(event) => onChange(event.target.value)}
+            onChange={(event) => handleChange(event.target.value)}
             spellCheck={false}
-            className="absolute inset-0 w-full h-full py-4 px-4 bg-transparent font-mono text-xs leading-[1.625] text-transparent caret-text-primary outline-none resize-none whitespace-pre"
+            className="absolute inset-0 w-full h-full py-4 px-4 bg-transparent font-mono text-xs leading-[1.625] text-transparent caret-text-primary outline-none resize-none whitespace-pre overflow-auto code-scrollbar"
           />
+          <div
+            className={twMerge(
+              "absolute bottom-3 right-3 z-10 rounded-md border border-border-primary bg-bg-surface px-2 py-1 font-mono text-[11px] pointer-events-none",
+              isOverLimit ? "text-accent-red" : "text-text-tertiary",
+            )}
+          >
+            {characterCount}/{maxChars}
+          </div>
         </div>
       </div>
     </div>
