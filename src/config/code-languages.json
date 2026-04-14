@@ -1,0 +1,30 @@
+{
+  "enabled": "all",
+  "pinned": [
+    "typescript",
+    "tsx",
+    "javascript",
+    "json",
+    "yaml",
+    "bash",
+    "css",
+    "html",
+    "sql",
+    "python",
+    "go",
+    "rust",
+    "java",
+    "kotlin",
+    "swift",
+    "php"
+  ],
+  "labelOverrides": {
+    "csharp": "C#",
+    "cpp": "C++",
+    "fsharp": "F#",
+    "objective-c": "Objective-C",
+    "objc": "Objective-C",
+    "javascriptreact": "JSX",
+    "typescriptreact": "TSX"
+  }
+}

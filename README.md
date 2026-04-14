@@ -1,5 +1,45 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Database
+
+### Requirements
+
+- Docker + Docker Compose
+- Node.js + pnpm
+
+### Setup
+
+1) Start PostgreSQL
+
+```bash
+docker compose up -d
+```
+
+2) Install dependencies
+
+```bash
+pnpm install
+```
+
+3) Create `.env.local` with the database URL
+
+```
+DATABASE_URL=postgresql://devroast:devroast@localhost:5432/devroast
+```
+
+4) Generate and run migrations
+
+```bash
+pnpm db:generate
+pnpm db:migrate
+```
+
+### Drizzle Studio
+
+```bash
+pnpm db:studio
+```
+
 ## Getting Started
 
 First, run the development server:
