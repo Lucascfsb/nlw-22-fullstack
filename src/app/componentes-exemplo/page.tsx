@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/analysis-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CodeBlock } from "@/components/ui/code-block";
+import { CodeBlock, CodeBlockHeader } from "@/components/ui/code-block";
 import { DiffLine } from "@/components/ui/diff-line";
 import {
   LeaderboardRowCode,
@@ -89,14 +89,16 @@ export default function ComponentesExemploPage() {
           <span className="font-mono text-xs font-bold text-text-tertiary">
             Code Block
           </span>
-          <CodeBlock
-            code={
-              "function calculateTotal(items) {\n  var total = 0;\n  for (var i = 0; ...) {\n    total = total + items[i].price;\n  }\n}"
-            }
-            lang="javascript"
-            filename="calculate.js"
-            className="max-w-xl"
-          />
+          <div className="max-w-xl border border-border-primary">
+            <CodeBlockHeader filename="calculate.js" />
+            <CodeBlock
+              code={
+                "function calculateTotal(items) {\n  var total = 0;\n  for (var i = 0; ...) {\n    total = total + items[i].price;\n  }\n}"
+              }
+              lang="javascript"
+              className="border-0"
+            />
+          </div>
         </section>
 
         <section className="flex flex-col gap-4">

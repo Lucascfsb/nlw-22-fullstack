@@ -1,15 +1,13 @@
-import type { BundledLanguage } from "shiki";
-import { codeToHtml } from "shiki";
+import type { ComponentProps } from "react";
+import { type BundledLanguage, codeToHtml } from "shiki";
 import { twMerge } from "tailwind-merge";
 
-type CodeBlockProps = {
+type CodeBlockProps = ComponentProps<"div"> & {
   code: string;
   lang: BundledLanguage;
-  filename?: string;
-  className?: string;
 };
 
-async function CodeBlock({ code, lang, filename, className }: CodeBlockProps) {
+async function CodeBlock({ code, lang, className, ...props }: CodeBlockProps) {
   const html = await codeToHtml(code, {
     lang,
     theme: "vesper",
@@ -23,19 +21,8 @@ async function CodeBlock({ code, lang, filename, className }: CodeBlockProps) {
         "border border-border-primary overflow-hidden",
         className,
       )}
+      {...props}
     >
-      <div className="flex items-center gap-3 h-10 px-4 border-b border-border-primary">
-        <span className="size-2.5 rounded-full bg-accent-red" />
-        <span className="size-2.5 rounded-full bg-accent-amber" />
-        <span className="size-2.5 rounded-full bg-accent-green" />
-        <span className="flex-1" />
-        {filename && (
-          <span className="font-mono text-xs text-text-tertiary">
-            {filename}
-          </span>
-        )}
-      </div>
-
       <div className="flex bg-bg-input">
         <div className="flex flex-col items-end gap-1.5 py-3 px-2.5 w-10 border-r border-border-primary bg-bg-surface select-none">
           {lines.map((_, i) => (
@@ -58,4 +45,37 @@ async function CodeBlock({ code, lang, filename, className }: CodeBlockProps) {
   );
 }
 
-export { CodeBlock, type CodeBlockProps };
+type CodeBlockHeaderProps = ComponentProps<"div"> & {
+  filename?: string;
+};
+
+function CodeBlockHeader({
+  filename,
+  className,
+  ...props
+}: CodeBlockHeaderProps) {
+  return (
+    <div
+      className={twMerge(
+        "flex items-center gap-3 h-10 px-4 border-b border-border-primary",
+        className,
+      )}
+      {...props}
+    >
+      <span className="size-2.5 rounded-full bg-accent-red" />
+      <span className="size-2.5 rounded-full bg-accent-amber" />
+      <span className="size-2.5 rounded-full bg-accent-green" />
+      <span className="flex-1" />
+      {filename && (
+        <span className="font-mono text-xs text-text-tertiary">{filename}</span>
+      )}
+    </div>
+  );
+}
+
+export {
+  CodeBlock,
+  CodeBlockHeader,
+  type CodeBlockHeaderProps,
+  type CodeBlockProps,
+};

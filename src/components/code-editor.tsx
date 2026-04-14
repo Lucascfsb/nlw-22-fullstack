@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
 import hljs from "highlight.js";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  type BundledLanguage,
   bundledLanguagesInfo,
   createHighlighter,
-  type BundledLanguage,
   type Highlighter,
 } from "shiki/bundle/web";
 import { twMerge } from "tailwind-merge";
