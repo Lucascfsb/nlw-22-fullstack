@@ -19,7 +19,13 @@
     "@base-ui/react": "^1.0.0",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@next/font": "^14.2.15",
+    "@number-flow/react": "^0.6.0",
     "@radix-ui/react-switch": "^1.2.6",
+    "@tanstack/react-query": "^5.99.0",
+    "@trpc/client": "^11.16.0",
+    "@trpc/server": "^11.16.0",
+    "@trpc/tanstack-react-query": "^11.16.0",
+    "client-only": "^0.0.1",
     "drizzle-orm": "^0.44.5",
     "highlight.js": "^11.9.0",
     "markdown-it": "^14.1.1",
@@ -28,9 +34,11 @@
     "prism-react-renderer": "^2.4.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "server-only": "^0.0.1",
     "shiki": "^4.0.2",
     "tailwind-merge": "^3.5.0",
-    "tailwind-variants": "^3.2.2"
+    "tailwind-variants": "^3.2.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.10",

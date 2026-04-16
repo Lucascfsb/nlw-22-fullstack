@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { AnalysisCardBadge } from "@/components/ui/analysis-card";
 import {
+  AnalysisCardBadge,
   AnalysisCardDescription,
   AnalysisCardRoot,
   AnalysisCardTitle,
